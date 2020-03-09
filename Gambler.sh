@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 echo "Welcome to Gambler Simulation problem"
 
@@ -58,6 +58,3 @@ win=0
 loss=0
 day=0
 done
-
-
-
