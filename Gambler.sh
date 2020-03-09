@@ -10,19 +10,39 @@ MINIMUMSTAKE=$(($STAKE - $FIFTYPERCENTAGE))
 MAXIMUMSTAKE=$(($STAKE + $FIFTYPERCENTAGE))
 
 #variables
-currentStake=STAKE
-bets=0
+currentStake=$STAKE
+wins=0
+loss=0
 
 #Win or loose
 
-while [[ currentStake -gt MINIMUMSTAKE &&
-			 currentStake -lt MAXIMUMSTAKE ]]
+for(( i = 1; i <= 20; i++ ))
 do
-	randomCheck=$(( RANDOM%2 ))
-	if (( $randomCheck == 0 ))
+	currentStake=$STAKE
+	while [[ currentStake -gt MINIMUMSTAKE &&
+				 currentStake -lt MAXIMUMSTAKE ]]
+	do
+		randomCheck=$(( RANDOM%2 ))
+		if (( $randomCheck == 0 ))
+		then
+			currentStake=$(($currentStake + $BET))
+		else
+			currentStake=$(($currentStake - $BET))
+		fi
+	done
+	if (( $currentStake == MAXIMUMSTAKE ))
 	then
-		currentStake=$(($currentStake + $BET))
+		((wins++))
 	else
-		currentStake=$(($currentStake - $BET))
+		((loss++))
 	fi
 done
+
+TotalWins=$(($wins * $FIFTYPERCENTAGE))
+TotalLosses=$(($loss * $FIFTYPERCENTAGE))
+
+echo "Total amount won in 20 days is "$TotalWins
+echo "Total amount lost in 20 days is "$TotalLosses
+
+
+
