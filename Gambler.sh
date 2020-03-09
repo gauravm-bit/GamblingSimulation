@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 echo "Welcome to Gambler Simulation problem"
 
@@ -13,36 +13,51 @@ MAXIMUMSTAKE=$(($STAKE + $FIFTYPERCENTAGE))
 currentStake=$STAKE
 wins=0
 loss=0
+monthlystake=0
+day=0
+result=""
+
 
 #Win or loose
 
-for(( i = 1; i <= 20; i++ ))
+for(( index = 1; index <=3; index++))
 do
-	currentStake=$STAKE
-	while [[ currentStake -gt MINIMUMSTAKE &&
-				 currentStake -lt MAXIMUMSTAKE ]]
+	for(( i = 1; i <= 20; i++ ))
 	do
-		randomCheck=$(( RANDOM%2 ))
-		if (( $randomCheck == 0 ))
+		currentStake=$STAKE
+		while [[ currentStake -gt MINIMUMSTAKE &&
+					 currentStake -lt MAXIMUMSTAKE ]]
+		do
+			randomCheck=$(( RANDOM%2 ))
+			if (( $randomCheck == 0 ))
+			then
+				currentStake=$(($currentStake + $BET))
+			else
+				currentStake=$(($currentStake - $BET))
+			fi
+		done
+		if (( $currentStake == MAXIMUMSTAKE ))
 		then
-			currentStake=$(($currentStake + $BET))
+			((wins++))
+			monthlystake=$(( $monthlystake + $FIFTYPERCENTAGE ))
+			result="win"
 		else
-			currentStake=$(($currentStake - $BET))
+			((loss++))
+			mothlystake=$(( $monthlystake + $FIFTYPERCENTAGE ))
+			result="loose"
 		fi
+	((day++))
+	echo "$day day $FIFTYPERCENTAGE $result"
 	done
-	if (( $currentStake == MAXIMUMSTAKE ))
-	then
-		((wins++))
-	else
-		((loss++))
-	fi
-done
-
 TotalWins=$(($wins * $FIFTYPERCENTAGE))
 TotalLosses=$(($loss * $FIFTYPERCENTAGE))
-
-echo "Total amount won in 20 days is "$TotalWins
-echo "Total amount lost in 20 days is "$TotalLosses
+echo "Total win for the month "$TotalWins
+echo "Total loss for the month "$TotalLosses
+monthlstake=0
+win=0
+loss=0
+day=0
+done
 
 
 
