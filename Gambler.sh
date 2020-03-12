@@ -65,15 +65,28 @@ do
 				unluckyDay=$i
 			fi
 	done
-TotalWins=$(($wins * $FIFTYPERCENTAGE))
-TotalLosses=$(($loss * $FIFTYPERCENTAGE))
-echo "Total win for the month "$TotalWins
-echo "Total loss for the month "$TotalLosses
-echo "luckiest day is $luckyDay = $luckiestDay"
-echo "unluckiest day is $unluckyDay = $unluckiestDay"
-monthlstake=0
-win=0
-loss=0
-day=0
+	TotalWins=$(($wins * $FIFTYPERCENTAGE))
+	TotalLosses=$(($loss * $FIFTYPERCENTAGE))
+	echo "Total win for the month "$TotalWins
+	echo "Total loss for the month "$TotalLosses
+	echo "luckiest day is $luckyDay = $luckiestDay"
+	echo "unluckiest day is $unluckyDay = $unluckiestDay"
+	if (( win > loose ))
+	then
+		read -p "Would you like to continue ? (yes or no) " choice
+		if (( choice == "yes"))
+		then
+			echo "OK"
+		else
+			break
+		fi
+	else
+			break
+	fi
+
+	monthlstake=0
+	win=0
+	loss=0
+	day=0
 done
 
