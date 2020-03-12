@@ -17,16 +17,17 @@ monthlystake=0
 day=0
 result=""
 
-
+declare -a monthlyStakeArray
 #Win or loose
+read -p "Enter the number of months: " month
 
-for(( index = 1; index <=3; index++))
+for(( index = 1; index <=month; index++))
 do
    for(( i = 1; i <= 20; i++ ))
    do
       currentStake=$STAKE
-      while [[ currentStake -gt MINIMUMSTAKE &&
-                currentStake -lt MAXIMUMSTAKE ]]
+      while [[ currentStake -ge MINIMUMSTAKE &&
+                currentStake -le MAXIMUMSTAKE ]]
       do
          randomCheck=$(( RANDOM%2 ))
          if (( $randomCheck == 0 ))
@@ -36,7 +37,7 @@ do
             currentStake=$(($currentStake - $BET))
          fi
       done
-      if (( $currentStake == MAXIMUMSTAKE ))
+      if (( $currentStake > MAXIMUMSTAKE ))
       then
          ((wins++))
          monthlystake=$(( $monthlystake + $FIFTYPERCENTAGE ))
@@ -47,12 +48,29 @@ do
          result="loose"
       fi
 		((day++))
-   	echo "$day day $FIFTYPERCENTAGE $result"
+		monthlyStakeArray[$day]=$monthlystake
+		echo "$day day $FIFTYPERCENTAGE $result $monthlystake"
    done
+	luckiestDay=${monthlyStakeArray[1]}
+	unluckiestDay=${monthlyStakeArray[1]}
+	for (( i=1; i<=${#monthlyStakeArray[@]}; i++ ))
+	do
+			if (( luckiestDay < ${monthlyStakeArray[$i]}))
+			then
+				luckiestDay=${monthlyStakeArray[$i]}
+				luckyDay=$i
+			elif ((unluckiestDay > ${monthlyStakeArray[$i]} ))
+			then
+				unluckiestDay=${monthlyStakeArray[$i]}
+				unluckyDay=$i
+			fi
+	done
 TotalWins=$(($wins * $FIFTYPERCENTAGE))
 TotalLosses=$(($loss * $FIFTYPERCENTAGE))
 echo "Total win for the month "$TotalWins
 echo "Total loss for the month "$TotalLosses
+echo "luckiest day is $luckyDay = $luckiestDay"
+echo "unluckiest day is $unluckyDay = $unluckiestDay"
 monthlstake=0
 win=0
 loss=0
